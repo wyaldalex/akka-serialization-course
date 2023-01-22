@@ -98,4 +98,15 @@ object CustomSerialization_Remote extends App {
 
 }
 
+object CustomSerialization_Persistence extends App {
+  val config = ConfigFactory.load("persistentStores").getConfig("postgresStore")
+    .withFallback(ConfigFactory.load("customSerialization"))
+
+  val system = ActorSystem("PersistentSystem", config)
+  val simplePersistentActor = system.actorOf(SimplePersistentActor.props("1234x121", true), "personJsonPersistentActor")
+  simplePersistentActor ! Person("John Locke Persistent",60)
+
+
+}
+
 
