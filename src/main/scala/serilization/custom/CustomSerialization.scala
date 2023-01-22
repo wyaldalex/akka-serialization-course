@@ -4,6 +4,9 @@ import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.serialization.Serializer
 import com.typesafe.config.ConfigFactory
 
+//import spray everything
+import spray.json._
+
 case class Person(name: String, age: Int)
 
 object SimpleActor {
@@ -44,6 +47,31 @@ class PersonSerializer extends Serializer {
     person
   }
 }
+
+class PersonJsonSerializer extends Serializer with DefaultJsonProtocol {
+
+  implicit val personFormat = jsonFormat2(Person)
+
+  override def identifier: Int = 43678
+
+  override def toBinary(o: AnyRef): Array[Byte] = o match {
+    case p: Person =>
+      val json: String = p.toJson.prettyPrint
+      println(s"Converting $p to json $json")
+      json.getBytes()
+    case _ => throw new IllegalArgumentException("only person type is supported for this serializer")
+  }
+
+  override def includeManifest: Boolean = false
+
+  override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef = {
+    val string = new String(bytes)
+    val person = string.parseJson.convertTo[Person]
+    println(s"Deserialized $string to $person")
+    person
+  }
+}
+
 
 object CustomSerialization_Local extends App {
   val config = ConfigFactory.parseString(
