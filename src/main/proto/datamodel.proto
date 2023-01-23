@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package serialization.protobuf;
+
+option java_package = "serialization.protobuf";
+
+message OnlineStoreUser {
+    required int32 storeId = 1;
+    required string userName = 2;
+    optional string userEmail = 4;
+}

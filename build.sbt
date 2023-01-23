@@ -45,4 +45,8 @@ libraryDependencies ++= Seq(
   // Cassandra
   "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.91",
   "com.typesafe.akka" %% "akka-persistence-cassandra-launcher" % "0.91" % Test,
+
+  // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+  "com.google.guava" % "guava" % "28.0-jre"
+
 )
